@@ -1,0 +1,11 @@
+{
+  "name": "gsd-gtm-dashboard",
+  "version": "1.0.0",
+  "description": "GSD Idea GTM Dashboard",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
