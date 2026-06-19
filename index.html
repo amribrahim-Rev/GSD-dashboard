@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GSD Idea — GTM Dashboard</title>
+<style>
+  :root{--bg:#0f1216;--card:#191e26;--line:#2a313c;--txt:#e6e9ee;--mut:#9aa4b2;--accent:#5b8cff;--green:#3fb56b;--amber:#e0a13c;--red:#e0564c}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);font:15px/1.55 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+  .wrap{max-width:1040px;margin:0 auto;padding:32px 20px 80px}
+  header{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:28px}
+  h1{margin:0 0 4px;font-size:26px}
+  .sub{color:var(--mut);font-size:14px}
+  h2{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);margin:34px 0 14px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+  .num{font-size:28px;font-weight:700}
+  .lbl{color:var(--mut);font-size:13px;margin-top:2px}
+  table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);font-size:14px}
+  th{color:var(--mut);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+  tr:last-child td{border-bottom:none}
+  .pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:12px;font-weight:600}
+  .hot{background:rgba(224,86,76,.15);color:#ff7d73}
+  .warm{background:rgba(224,161,60,.15);color:var(--amber)}
+  .stall{background:rgba(154,164,178,.15);color:var(--mut)}
+  .li{background:rgba(91,140,255,.15);color:#88aaff}
+  .em{background:rgba(63,181,107,.15);color:#5fd089}
+  ul{margin:8px 0;padding-left:20px}li{margin:4px 0}
+  .warn{background:rgba(224,86,76,.08);border:1px solid rgba(224,86,76,.3);border-radius:12px;padding:16px}
+  .foot{color:var(--mut);font-size:13px;margin-top:40px;border-top:1px solid var(--line);padding-top:16px}
+  code{background:#11151b;padding:1px 6px;border-radius:5px;font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>GSD Idea — GTM Dashboard</h1>
+    <div class="sub">IDEA StatiCa, exclusive reseller in Saudi · Steel connection design · Updated 2026-06-17</div>
+  </header>
+
+  <h2>Lead Base</h2>
+  <div class="cards">
+    <div class="card"><div class="num">718</div><div class="lbl">Total leads (master)</div></div>
+    <div class="card"><div class="num">676</div><div class="lbl">With valid email</div></div>
+    <div class="card"><div class="num">42</div><div class="lbl">LinkedIn-only</div></div>
+    <div class="card"><div class="num">108</div><div class="lbl">Customers (excluded)</div></div>
+  </div>
+
+  <h2>The Four Campaigns</h2>
+  <table>
+    <tr><th>Campaign</th><th>Count</th><th>Channel</th><th>Account</th><th>Persona</th></tr>
+    <tr><td>Senior Email</td><td>336</td><td><span class="pill em">Email</span></td><td>GSD domains</td><td>Senior / leaders</td></tr>
+    <tr><td>Structural Email</td><td>340</td><td><span class="pill em">Email</span></td><td>GSD domains</td><td>Structural engineers</td></tr>
+    <tr><td>Senior LinkedIn</td><td>90</td><td><span class="pill li">LinkedIn</span></td><td>Jan</td><td>Senior / leaders</td></tr>
+    <tr><td>Structural LinkedIn</td><td>90</td><td><span class="pill li">LinkedIn</span></td><td>Ahmed Amr</td><td>Structural engineers</td></tr>
+  </table>
+  <p class="sub">LinkedIn capped at top 90 per account by follower / connection reach. Senior LinkedIn goes to Jan only. Email sends from GSD domains.</p>
+
+  <h2>Pipeline</h2>
+  <table>
+    <tr><th>Priority</th><th>Lead</th><th>Status</th></tr>
+    <tr><td><span class="pill hot">HOT</span></td><td>Mohammed Talha</td><td>19 msgs, corbel demo proposed</td></tr>
+    <tr><td><span class="pill hot">HOT</span></td><td>Khalid Monem</td><td>Meeting proposed, awaiting confirm</td></tr>
+    <tr><td><span class="pill warm">WARM</span></td><td>Ali, Fatima, Heba, Eman</td><td>Active threads</td></tr>
+    <tr><td><span class="pill stall">STALLED</span></td><td>5 Eid-stalled leads</td><td>Re-engage, no-oriented question</td></tr>
+  </table>
+  <p class="sub">Reply rate 48% on engaged LinkedIn · Target: 5 meetings this month</p>
+
+  <h2>The Benchmark</h2>
+  <div class="card">
+    <strong>200 connections in 2 hours 25 minutes.</strong> 83% of engineers say 6+ hours by hand. Simple connection 5 to 10 min by hand, complex up to 2 hours, IDEA StatiCa 5 min.
+    <div class="sub" style="margin-top:8px">Named Saudi proof: Saudi Binladin · MBL · Freyssinet · ALBAWANI · Jeddah Tower · Riyadh F1 · Qiddiya</div>
+  </div>
+
+  <h2>Copy Rules</h2>
+  <ul>
+    <li>No dashes ever. Under 100 words. No paragraph over 2 lines.</li>
+    <li>Say "Saudi", never "KSA". No fluff, no spam triggers.</li>
+    <li>No jargon or software names in cold openers.</li>
+    <li>CTA is always a direct question. Loss aversion over benefit.</li>
+  </ul>
+
+  <h2>Critical: Customers are not prospects</h2>
+  <div class="warn">
+    108 companies already own IDEA StatiCa. Some double as our social proof (ALBAWANI, Saudi Binladin, Freyssinet, MBL). Cite them as proof, never cold-pitch them. 114 leads were caught and removed from recent sourced lists because they were at customer companies.
+  </div>
+
+  <h2>Before Any Launch</h2>
+  <ul>
+    <li>Verify the 676 emails in Million Verifier. Send only to valid.</li>
+    <li>Email mailboxes must be warmed and green (95%+) first.</li>
+    <li>LinkedIn within safe limits (20 to 25 requests per account per day).</li>
+  </ul>
+
+  <div class="foot">
+    Full detail in the Obsidian brain (<code>GSD Agent/</code>): GSD Brain, Campaign Segmentation, Month 2 Plan, Copy Rules, Personas, Benchmarks, Pipeline, DNC and Existing Customers, Email Deliverability, KPIs, Weekly Operating Rhythm.
+  </div>
+</div>
+</body>
+</html>
