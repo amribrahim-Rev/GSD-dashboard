@@ -5,7 +5,10 @@ const path = require('path');
 const port = process.env.PORT || 3000;
 const html = fs.readFileSync(path.join(__dirname, 'index.html'));
 
-const XLSX = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+const TYPES = {
+  '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+};
 
 http.createServer((req, res) => {
   const url = (req.url || '/').split('?')[0];
@@ -16,12 +19,13 @@ http.createServer((req, res) => {
     return;
   }
 
-  // serve downloadable .xlsx lists
-  if (url.endsWith('.xlsx')) {
+  // serve downloadable lists / docs (.xlsx, .docx)
+  const ext = path.extname(url).toLowerCase();
+  if (TYPES[ext]) {
     const file = path.join(__dirname, path.basename(url));
     if (fs.existsSync(file)) {
       res.writeHead(200, {
-        'Content-Type': XLSX,
+        'Content-Type': TYPES[ext],
         'Content-Disposition': 'attachment; filename="' + path.basename(url) + '"'
       });
       res.end(fs.readFileSync(file));
