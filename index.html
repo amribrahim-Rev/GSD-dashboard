@@ -72,6 +72,13 @@
     </div>
     <div class="sub" style="margin-top:8px">Each card downloads its own list as Excel. The two copy docs open for Jan and Ahmed to review and comment.</div>
   </div>
+
+  <div class="section">
+    <div class="sec-head"><span class="dot" style="background:var(--green)"></span><h2>Live Replies</h2><span class="tag p-green" id="liveTag">live</span></div>
+    <div class="cards" id="emailPulse" style="margin-bottom:16px"></div>
+    <div id="liveReplies" style="background:var(--card);border:1px solid var(--line);border-radius:14px;padding:6px 4px"></div>
+    <div class="sub" id="liveUpdated" style="margin-top:8px">Loading live data...</div>
+  </div>
   <div class="section">
     <div class="sec-head"><span class="dot" style="background:var(--blue)"></span><h2>Month 1 Results</h2><span class="tag p-green">Optimization phase complete</span></div>
     <div class="cards" style="margin-bottom:16px">
@@ -122,5 +129,41 @@
   </div>
   <div class="foot">GSD Idea x IDEA StatiCa · Month 1 Report and First Two Weeks Plan · Full detail in the Obsidian brain.</div>
 </div>
+<script>
+(function(){
+  var SC={'Interested':'p-green','Question':'p-blue','Not now':'p-amber','Replied':'p-violet'};
+  function esc(s){return (s||'').replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
+  function ago(iso){ if(!iso) return ''; var d=new Date(iso),s=(Date.now()-d.getTime())/1000;
+    if(s<3600) return Math.max(1,Math.round(s/60))+'m ago'; if(s<86400) return Math.round(s/3600)+'h ago'; return Math.round(s/86400)+'d ago'; }
+  function render(d){
+    var ep=document.getElementById('emailPulse');
+    ep.innerHTML=(d.emails||[]).map(function(e){
+      var br=e.sent?((e.bounce/e.sent*100)).toFixed(1):'0';
+      return '<div class="card"><div style="font-size:12px;color:var(--mut);font-weight:700">EMAIL · '+esc(e.name).toUpperCase()+'</div>'+
+        '<div class="num" style="font-size:24px">'+e.sent+'<span style="font-size:13px;color:var(--mut)"> sent</span></div>'+
+        '<div class="lbl">'+e.reply+' replies · '+e.bounce+' bounce ('+br+'%)</div></div>';
+    }).join('');
+    var lr=document.getElementById('liveReplies'), items=d.replies||[];
+    var awaiting=items.filter(function(x){return x.awaiting;}).length;
+    document.getElementById('liveTag').textContent=items.length+' replies · '+awaiting+' to answer';
+    if(!items.length){ lr.innerHTML='<div style="padding:14px 16px;color:var(--mut);font-size:14px">'+(d.repliesErr?('Replies unavailable ('+esc(d.repliesErr)+'). Set HEYREACH_KEY in Railway.'):'No replies yet.')+'</div>'; }
+    else {
+      lr.innerHTML=items.map(function(r){
+        return '<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line)">'+
+          '<span class="pill '+(SC[r.status]||'p-violet')+'">'+esc(r.status)+'</span>'+
+          '<div style="flex:1;min-width:0"><div style="font-weight:700;font-size:14px">'+esc(r.first)+' <span style="font-weight:400;color:var(--mut)">· '+esc(r.company)+'</span></div></div>'+
+          (r.awaiting?'<span style="font-size:12px;color:var(--red);font-weight:700">reply &rarr;</span>':'')+
+          '<span style="font-size:12px;color:var(--mut);min-width:54px;text-align:right">'+esc(r.account)+'</span>'+
+          '<span style="font-size:12px;color:var(--mut);min-width:60px;text-align:right">'+ago(r.when)+'</span></div>';
+      }).join('');
+    }
+    document.getElementById('liveUpdated').textContent='Updated '+new Date(d.updated).toLocaleTimeString()+' · refreshes every 60s · showing first name + company + status only';
+  }
+  function load(){ fetch('/api/live',{cache:'no-store'}).then(function(r){return r.json();}).then(render).catch(function(e){
+    document.getElementById('liveUpdated').textContent='Live data unavailable: '+e; }); }
+  load(); setInterval(load,60000);
+})();
+</script>
+
 </body>
 </html>
