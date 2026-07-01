@@ -82,7 +82,7 @@
           <div class="card kpi"><div class="lbl">Sent</div><div class="num" id="kSent">–</div><div class="delta" id="dSent"></div></div>
           <div class="card kpi"><div class="lbl">Replied</div><div class="num" id="kReplied">–</div><div class="delta" id="dReplied"></div></div>
           <div class="card kpi"><div class="lbl">Reply rate</div><div class="num" id="kRate">–</div><div class="delta" id="dRate">of sent</div></div>
-          <div class="card kpi"><div class="lbl">Interested</div><div class="num" id="kInt">–</div><div class="delta">LinkedIn tagged</div></div>
+          <div class="card kpi"><div class="lbl">To answer</div><div class="num" id="kInt">–</div><div class="delta">awaiting reply</div></div>
         </div>
         <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:14px" id="ovGrid">
           <div class="panel">
@@ -128,7 +128,8 @@
 <script>
 (function(){
   var DATA=null, chart=null, tagFilter='all';
-  var SC={'Interested':'p-green','Question':'p-blue','Not now':'p-amber','Replied':'p-gray'};
+  var TAGCLR={'Interested':'p-green','Meeting Request':'p-green','New reply':'p-green','Not Interested':'p-amber','Do Not Contact':'p-amber','Wrong Person':'p-amber','Out Of Office':'p-blue','Information Request':'p-blue','Answered':'p-gray','Untagged':'p-gray'};
+  function tagClass(s){return TAGCLR[s]||'p-violet';}
   function esc(s){return (s||'').replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
   function ago(iso){if(!iso)return'';var s=(Date.now()-new Date(iso).getTime())/1000;if(s<3600)return Math.max(1,Math.round(s/60))+'m';if(s<86400)return Math.round(s/3600)+'h';return Math.round(s/86400)+'d';}
   function ch(){return document.getElementById('fChannel').value;}
@@ -136,6 +137,12 @@
   function incEmail(){return ch()!=='linkedin' && (acc()==='all'||acc()==='Ahmed');}
   function incLI(){return ch()!=='email';}
   function liAccts(){var a=acc();return a==='all'?['Jan','Ahmed']:(DATA.linkedin[a]?[a]:[]);}
+  function passReply(r){
+    if(r.channel==='LinkedIn' && !incLI())return false;
+    if(r.channel==='Email' && !incEmail())return false;
+    if(acc()!=='all' && r.account!==acc())return false;
+    return true;
+  }
 
   function agg(){
     var e=DATA.email||{}, l=DATA.linkedin||{};
@@ -165,7 +172,7 @@
     else {denom=a.sent;rep=a.replied;rlab='of sent';}
     document.getElementById('kRate').textContent=denom?((rep/denom*100).toFixed(1)+'%'):'0%';
     document.getElementById('dRate').textContent=rlab;
-    document.getElementById('kInt').textContent=num(a.interested);
+    document.getElementById('kInt').textContent=num((DATA.replies||[]).filter(function(r){return passReply(r)&&r.awaiting;}).length);
     document.getElementById('dSent').textContent=(incEmail()?num(a.emailSent)+' email':'')+(incEmail()&&incLI()?' · ':'')+(incLI()?num(a.invites)+' invites':'');
     document.getElementById('dReplied').textContent=(incLI()&&!incEmail()?num(a.messaged)+' people messaged':'across selected');
   }
@@ -182,7 +189,6 @@
       h+=bar('Accepted',a.accepted,m,'#3b82f6');
       h+=bar('Messaged',a.messaged,m,'#60a5fa');
       h+=bar('Replied',a.replied,m,'#16a34a');
-      h+=bar('Interested',a.interested,m,'#15803d');
       h+='<div class="muted" style="margin-top:12px;line-height:1.8">Acceptance rate: <b style="color:var(--ink)">'+pct(a.accepted,a.invites)+'</b> of invites<br>People messaged: <b style="color:var(--ink)">'+num(a.messaged)+'</b><br>Reply rate: <b style="color:var(--ink)">'+pct(a.liReplied,a.messaged||a.accepted)+'</b> of people messaged</div>';
     } else if(incEmail() && !incLI()){
       var m2=a.emailSent||1;
@@ -195,7 +201,6 @@
       h+=bar('Accepted (LI)',a.accepted,m3,'#3b82f6');
       h+=bar('Messaged (LI)',a.messaged,m3,'#60a5fa');
       h+=bar('Replied',a.replied,m3,'#16a34a');
-      h+=bar('Interested',a.interested,m3,'#15803d');
     }
     document.getElementById('funnel').innerHTML=h;
   }
@@ -211,28 +216,25 @@
     chart=new Chart(document.getElementById('perfChart'),{type:'line',data:{labels:labels,datasets:ds},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:12}}}},scales:{y:{beginAtZero:true,grid:{color:'rgba(0,0,0,.06)'}},x:{grid:{display:false}}}}});
   }
   function renderReplies(){
-    var items=(DATA.replies||[]).filter(function(r){
-      if(!incLI())return false;
-      if(acc()!=='all' && r.account!==acc())return false;
-      if(tagFilter!=='all' && r.status!==tagFilter)return false;
-      return true;
-    });
-    var all=(DATA.replies||[]).filter(function(r){return incLI() && (acc()==='all'||r.account===acc());});
-    var counts={Interested:0,Question:0,'Not now':0,Replied:0};
-    all.forEach(function(r){counts[r.status]=(counts[r.status]||0)+1;});
-    var chips=[['all','All ('+all.length+')']].concat([['Interested','Interested ('+counts.Interested+')'],['Question','Question ('+counts.Question+')'],['Not now','Not now ('+counts['Not now']+')'],['Replied','Answered ('+counts.Replied+')']]);
-    document.getElementById('tagChips').innerHTML=chips.map(function(c){return '<span class="chip'+(tagFilter===c[0]?' on':'')+'" data-t="'+c[0]+'">'+c[1]+'</span>';}).join('');
+    var base=(DATA.replies||[]).filter(passReply);
+    var counts={};
+    base.forEach(function(r){counts[r.status]=(counts[r.status]||0)+1;});
+    var uniq=Object.keys(counts).sort(function(a,b){return counts[b]-counts[a];});
+    var chips=[['all','All ('+base.length+')']].concat(uniq.map(function(t){return [t,t+' ('+counts[t]+')'];}));
+    document.getElementById('tagChips').innerHTML=chips.map(function(c){return '<span class="chip'+(tagFilter===c[0]?' on':'')+'" data-t="'+esc(c[0])+'">'+esc(c[1])+'</span>';}).join('');
     Array.prototype.forEach.call(document.querySelectorAll('#tagChips .chip'),function(el){el.onclick=function(){tagFilter=el.getAttribute('data-t');renderReplies();};});
-    var aw=all.filter(function(r){return r.awaiting;}).length;
-    document.getElementById('repTag').textContent=all.length+' replies · '+aw+' to answer';
+    var aw=base.filter(function(r){return r.awaiting;}).length;
+    document.getElementById('repTag').textContent=base.length+' replies · '+aw+' to answer';
+    var items=base.filter(function(r){return tagFilter==='all'||r.status===tagFilter;});
     if(!items.length){document.getElementById('repliesList').innerHTML='<div style="padding:14px;color:var(--mut)">'+(DATA.repliesErr?('Unavailable: '+esc(DATA.repliesErr)):'No replies in this view.')+'</div>';return;}
-    document.getElementById('repliesList').innerHTML=items.map(function(r,i){
-      return '<div class="rrow" data-i="'+i+'"><div class="rhead">'+
-        '<span class="pill '+(SC[r.status]||'p-gray')+'">'+esc(r.status)+'</span>'+
+    document.getElementById('repliesList').innerHTML=items.map(function(r){
+      var tg=(r.tags&&r.tags.length?r.tags:[r.status]).map(function(t){return '<span class="pill '+tagClass(t)+'">'+esc(t)+'</span>';}).join(' ');
+      var body=r.channel==='Email'?('<div class="muted" style="margin:4px 0">Email reply · category <b style="color:var(--ink)">'+esc(r.status)+'</b> (reply text not available via API)</div>'):('<div class="muted" style="margin:4px 0">'+(r.awaiting?'Their reply:':'Last message (you):')+'</div><div class="q">'+esc(r.text||'(no text)')+'</div>');
+      return '<div class="rrow"><div class="rhead">'+tg+
         '<span class="nm">'+esc(r.first)+' <span class="muted">· '+esc(r.company||'—')+'</span></span>'+
         (r.awaiting?'<span style="color:var(--red);font-weight:700;font-size:12px">reply &rarr;</span>':'')+
-        '<span class="muted">'+esc(r.account)+'</span><span class="muted" style="min-width:34px;text-align:right">'+ago(r.when)+'</span></div>'+
-        '<div class="rbody" style="display:none"><div class="muted" style="margin:4px 0">'+(r.awaiting?'Their reply:':'Last message (you):')+'</div><div class="q">'+esc(r.text||'(no text)')+'</div></div></div>';
+        '<span class="muted">'+esc(r.channel)+' · '+esc(r.account)+'</span><span class="muted" style="min-width:34px;text-align:right">'+ago(r.when)+'</span></div>'+
+        '<div class="rbody" style="display:none">'+body+'</div></div>';
     }).join('');
     Array.prototype.forEach.call(document.querySelectorAll('#repliesList .rrow'),function(el){el.onclick=function(){var b=el.querySelector('.rbody');b.style.display=b.style.display==='none'?'block':'none';};});
   }

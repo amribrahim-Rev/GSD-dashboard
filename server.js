@@ -98,28 +98,52 @@ async function replyList() {
       const repliedLast = (c.lastMessageSender || '').toUpperCase() !== 'ME';
       if ((c.totalMessages || 0) < 2 && !repliedLast) continue;
       const pr = c.correspondentProfile || {};
-      const txt = c.lastMessageText || '';
+      const tags = (pr.tags && pr.tags.length) ? pr.tags : [];
       out.push({
         account: ACC[c.linkedInAccountId] || '?', channel: 'LinkedIn',
         first: pr.firstName || '', company: pr.companyName || '',
-        status: repliedLast ? statusOf(txt) : 'Replied',
-        text: txt, awaiting: repliedLast, when: c.lastMessageAt || ''
+        tags: tags, status: tags[0] || (repliedLast ? 'New reply' : 'Answered'),
+        text: c.lastMessageText || '', awaiting: repliedLast, when: c.lastMessageAt || ''
       });
     }
-    out.sort((a, b) => (b.when || '').localeCompare(a.when || ''));
     return { items: out, err: null };
   } catch (e) { return { items: [], err: String(e) }; }
+}
+
+async function slReplies() {
+  if (!SL) return [];
+  const out = [], seen = new Set();
+  await Promise.all(SL_CAMPAIGNS.map(async c => {
+    try {
+      const r = await fetch('https://server.smartlead.ai/api/v1/campaigns/' + c.id + '/statistics?api_key=' + SL + '&limit=500');
+      const d = await r.json();
+      for (const row of (d.data || [])) {
+        const cat = row.lead_category;
+        if (!cat || cat === 'Sender Originated Bounce') continue;
+        const key = (row.lead_email || row.lead_name || '') + '';
+        if (seen.has(key)) continue; seen.add(key);
+        out.push({
+          account: 'Ahmed', channel: 'Email', campaign: c.name,
+          first: (row.lead_name || '').split(' ')[0], company: row.company_name || '',
+          tags: [cat], status: cat, text: '', awaiting: false, when: row.reply_time || row.sent_time || ''
+        });
+      }
+    } catch (e) { /* skip */ }
+  }));
+  return out;
 }
 
 async function build() {
   if (cache.data && Date.now() - cache.ts < 120000) return cache.data;
   const days = dayList(WINDOW_DAYS);
-  const [email, linkedin, reps] = await Promise.all([
+  const [email, linkedin, hrReps, slReps] = await Promise.all([
     SL ? emailData(days) : Promise.resolve({}),
     HR ? hrData(days) : Promise.resolve({}),
-    replyList()
+    replyList(),
+    SL ? slReplies() : Promise.resolve([])
   ]);
-  const data = { updated: new Date().toISOString(), days, email, linkedin, replies: reps.items, repliesErr: reps.err };
+  const replies = hrReps.items.concat(slReps).sort((a, b) => (b.when || '').localeCompare(a.when || ''));
+  const data = { updated: new Date().toISOString(), days, email, linkedin, replies, repliesErr: hrReps.err };
   cache = { data, ts: Date.now() };
   return data;
 }
