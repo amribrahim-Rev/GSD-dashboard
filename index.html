@@ -81,7 +81,7 @@
         <div class="cards" style="margin-bottom:14px">
           <div class="card kpi"><div class="lbl">Sent</div><div class="num" id="kSent">–</div><div class="delta" id="dSent"></div></div>
           <div class="card kpi"><div class="lbl">Replied</div><div class="num" id="kReplied">–</div><div class="delta" id="dReplied"></div></div>
-          <div class="card kpi"><div class="lbl">Reply rate</div><div class="num" id="kRate">–</div><div class="delta">of sent</div></div>
+          <div class="card kpi"><div class="lbl">Reply rate</div><div class="num" id="kRate">–</div><div class="delta" id="dRate">of sent</div></div>
           <div class="card kpi"><div class="lbl">Interested</div><div class="num" id="kInt">–</div><div class="delta">LinkedIn tagged</div></div>
         </div>
         <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:14px" id="ovGrid">
@@ -139,10 +139,10 @@
 
   function agg(){
     var e=DATA.email||{}, l=DATA.linkedin||{};
-    var sent=0,replied=0,accepted=0,interested=0,invites=0,emailSent=0;
-    if(incEmail())for(var k in e){sent+=e[k].sent;emailSent+=e[k].sent;replied+=e[k].replied;}
-    if(incLI())liAccts().forEach(function(n){var a=l[n];if(a){sent+=a.invites;invites+=a.invites;accepted+=a.accepted;replied+=a.replies;interested+=a.interested;}});
-    return {sent:sent,replied:replied,accepted:accepted,interested:interested,invites:invites,emailSent:emailSent};
+    var sent=0,replied=0,accepted=0,interested=0,invites=0,emailSent=0,messaged=0,messages=0,emailReplied=0,liReplied=0;
+    if(incEmail())for(var k in e){sent+=e[k].sent;emailSent+=e[k].sent;replied+=e[k].replied;emailReplied+=e[k].replied;}
+    if(incLI())liAccts().forEach(function(n){var a=l[n];if(a){sent+=a.invites;invites+=a.invites;accepted+=a.accepted;messaged+=a.messaged||0;messages+=a.messages||0;replied+=a.replies;liReplied+=a.replies;interested+=a.interested;}});
+    return {sent:sent,replied:replied,accepted:accepted,interested:interested,invites:invites,emailSent:emailSent,messaged:messaged,messages:messages,emailReplied:emailReplied,liReplied:liReplied};
   }
   function dailySeries(){
     var days=DATA.days, e=DATA.email||{}, l=DATA.linkedin||{};
@@ -159,31 +159,41 @@
     var a=agg();
     document.getElementById('kSent').textContent=num(a.sent);
     document.getElementById('kReplied').textContent=num(a.replied);
-    document.getElementById('kRate').textContent=a.sent?((a.replied/a.sent*100).toFixed(1)+'%'):'0%';
+    var denom,rep,rlab;
+    if(incLI()&&!incEmail()){denom=a.messaged||a.accepted||0;rep=a.liReplied;rlab='of '+num(denom)+' messaged';}
+    else if(incEmail()&&!incLI()){denom=a.emailSent;rep=a.emailReplied;rlab='of sent';}
+    else {denom=a.sent;rep=a.replied;rlab='of sent';}
+    document.getElementById('kRate').textContent=denom?((rep/denom*100).toFixed(1)+'%'):'0%';
+    document.getElementById('dRate').textContent=rlab;
     document.getElementById('kInt').textContent=num(a.interested);
     document.getElementById('dSent').textContent=(incEmail()?num(a.emailSent)+' email':'')+(incEmail()&&incLI()?' · ':'')+(incLI()?num(a.invites)+' invites':'');
-    document.getElementById('dReplied').textContent='across selected';
+    document.getElementById('dReplied').textContent=(incLI()?num(a.messages)+' messages sent':'across selected');
   }
   function bar(label,val,max,color){
     var w=max?Math.max(3,Math.round(val/max*100)):3;
     return '<div class="frow"><div class="flabel">'+label+'</div><div class="ftrack"><div class="fbar" style="width:'+w+'%;background:'+color+'"></div></div><div class="fval">'+num(val)+'</div></div>';
   }
+  function pct(n,d){return d?Math.round(n/d*100)+'%':'0%';}
   function renderFunnel(){
     var a=agg(),h='';
     if(incLI() && !incEmail()){
       var m=a.invites||1;
       h+=bar('Invites sent',a.invites,m,'#2563eb');
       h+=bar('Accepted',a.accepted,m,'#3b82f6');
+      h+=bar('Messaged',a.messaged,m,'#60a5fa');
       h+=bar('Replied',a.replied,m,'#16a34a');
       h+=bar('Interested',a.interested,m,'#15803d');
+      h+='<div class="muted" style="margin-top:12px;line-height:1.8">Acceptance rate: <b style="color:var(--ink)">'+pct(a.accepted,a.invites)+'</b> of invites<br>Messages sent: <b style="color:var(--ink)">'+num(a.messages)+'</b><br>Reply rate: <b style="color:var(--ink)">'+pct(a.liReplied,a.messaged||a.accepted)+'</b> of people messaged</div>';
     } else if(incEmail() && !incLI()){
       var m2=a.emailSent||1;
       h+=bar('Emails sent',a.emailSent,m2,'#16a34a');
-      h+=bar('Replied',a.replied,m2,'#15803d');
+      h+=bar('Replied',a.emailReplied,m2,'#15803d');
+      h+='<div class="muted" style="margin-top:12px">Reply rate: <b style="color:var(--ink)">'+pct(a.emailReplied,a.emailSent)+'</b> of sent</div>';
     } else {
       var m3=a.sent||1;
       h+=bar('Sent / invited',a.sent,m3,'#2563eb');
       h+=bar('Accepted (LI)',a.accepted,m3,'#3b82f6');
+      h+=bar('Messaged (LI)',a.messaged,m3,'#60a5fa');
       h+=bar('Replied',a.replied,m3,'#16a34a');
       h+=bar('Interested',a.interested,m3,'#15803d');
     }

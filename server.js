@@ -63,7 +63,7 @@ async function hrData(days) {
   const end = new Date(new Date(days[days.length - 1] + 'T00:00:00Z').getTime() + 86400000).toISOString();
   await Promise.all(HR_ACCOUNTS.map(async a => {
     const daily = {}; days.forEach(d => daily[d] = { invites: 0, accepted: 0, replies: 0 });
-    let invites = 0, accepted = 0, replies = 0, interested = 0, contacted = 0;
+    let invites = 0, accepted = 0, replies = 0, interested = 0, contacted = 0, messaged = 0, messages = 0;
     try {
       const r = await fetch('https://api.heyreach.io/api/public/stats/GetOverallStats', {
         method: 'POST', headers: { 'X-API-KEY': HR, 'Content-Type': 'application/json' },
@@ -76,9 +76,10 @@ async function hrData(days) {
         if (daily[day]) daily[day] = { invites: s.connectionsSent || 0, accepted: s.connectionsAccepted || 0, replies: s.totalMessageReplies || 0 };
         invites += s.connectionsSent || 0; accepted += s.connectionsAccepted || 0; replies += s.totalMessageReplies || 0;
         interested += s.autoTaggedInterested || 0; contacted += s.uniqueLeadsContacted || 0;
+        messaged += s.totalMessageStarted || 0; messages += s.messagesSent || 0;
       }
     } catch (e) { /* skip */ }
-    out[a.name] = { invites, accepted, replies, interested, contacted, daily };
+    out[a.name] = { invites, accepted, messaged, messages, replies, interested, contacted, daily };
   }));
   return out;
 }
