@@ -5,49 +5,75 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GSD Idea · GTM Dashboard</title>
 <style>
-  :root{--bg:#eef2f7;--card:#ffffff;--ink:#16202e;--mut:#667084;--line:#e3e8ef;--blue:#2563eb;--green:#16a34a;--amber:#d97706;--red:#dc2626;--violet:#7c3aed;--soft-blue:#eaf1fe;--soft-green:#e7f6ec;--soft-amber:#fdf3e3;--soft-red:#fdecec;--soft-violet:#f1ebfd;}
+  :root{--bg:#f6f7f9;--card:#ffffff;--ink:#0f172a;--mut:#64748b;--line:#e5e7eb;--blue:#2563eb;--green:#16a34a;--amber:#d97706;--red:#dc2626;--violet:#7c3aed;--soft-blue:#eff4ff;--soft-green:#ecfdf5;--soft-amber:#fffbeb;--soft-red:#fef2f2;--soft-violet:#f5f3ff;--radius:12px}
   *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
-  .wrap{max-width:1080px;margin:0 auto;padding:36px 22px 90px}
-  h1{margin:0 0 4px;font-size:28px;letter-spacing:-.3px}
-  .sub{color:var(--mut);font-size:14px}
-  .section{margin-top:38px}
-  .sec-head{display:flex;align-items:center;gap:10px;margin:0 0 16px}
-  .sec-head .dot{width:10px;height:10px;border-radius:50%}
-  .sec-head h2{font-size:18px;margin:0}
-  .sec-head .tag{margin-left:auto;font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px}
-  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:0 1px 2px rgba(16,32,46,.04)}
-  .num{font-size:30px;font-weight:800;letter-spacing:-.5px}
+  body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 ui-sans-serif,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  .app{display:flex;min-height:100vh}
+  .side{width:238px;flex-shrink:0;background:var(--card);border-right:1px solid var(--line);padding:22px 16px;position:sticky;top:0;height:100vh}
+  .brand{font-size:18px;font-weight:800;letter-spacing:-.3px}
+  .brand-sub{font-size:12px;color:var(--mut);margin-bottom:22px}
+  .side nav{display:flex;flex-direction:column;gap:2px}
+  .side nav a{padding:9px 12px;border-radius:8px;font-size:14px;color:var(--mut);text-decoration:none;font-weight:500}
+  .side nav a:hover{background:var(--bg);color:var(--ink)}
+  .side-foot{position:absolute;bottom:20px;font-size:12px;color:var(--mut)}
+  .main{flex:1;min-width:0}
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 32px;border-bottom:1px solid var(--line);background:var(--card);position:sticky;top:0;z-index:5}
+  .topbar h1{margin:0;font-size:20px;letter-spacing:-.3px}
+  .live-dot{font-size:13px;font-weight:700;color:var(--green);background:var(--soft-green);padding:5px 12px;border-radius:20px;white-space:nowrap}
+  .wrap{max-width:1120px;margin:0 auto;padding:26px 32px 80px}
+  .sub{color:var(--mut);font-size:13px}
+  .section{margin-top:30px}
+  .sec-head{display:flex;align-items:center;gap:10px;margin:0 0 14px}
+  .sec-head .dot{width:8px;height:8px;border-radius:50%}
+  .sec-head h2{font-size:16px;margin:0;font-weight:700;letter-spacing:-.2px}
+  .sec-head .tag{margin-left:auto;font-size:12px;font-weight:600;padding:4px 11px;border-radius:20px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:12px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;box-shadow:0 1px 2px rgba(16,24,40,.04);transition:box-shadow .15s ease,transform .15s ease}
+  a.card:hover{box-shadow:0 6px 18px rgba(16,24,40,.09);transform:translateY(-1px)}
+  .num{font-size:28px;font-weight:800;letter-spacing:-.5px}
   .lbl{color:var(--mut);font-size:13px;margin-top:3px}
   .pos{color:var(--green)} .neg{color:var(--red)} .bl{color:var(--blue)}
-  table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
-  th,td{text-align:left;padding:12px 16px;border-bottom:1px solid var(--line);font-size:14px}
-  th{color:var(--mut);font-weight:700;font-size:12px;text-transform:uppercase;background:#f8fafc}
+  table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  th,td{text-align:left;padding:11px 16px;border-bottom:1px solid var(--line);font-size:14px}
+  th{color:var(--mut);font-weight:600;font-size:11px;letter-spacing:.04em;text-transform:uppercase;background:#fafafa}
   tr:last-child td{border-bottom:none}
-  .pill{display:inline-block;padding:2px 10px;border-radius:20px;font-size:12px;font-weight:700}
+  .pill{display:inline-block;padding:3px 10px;border-radius:7px;font-size:12px;font-weight:600}
   .p-blue{background:var(--soft-blue);color:var(--blue)}
   .p-green{background:var(--soft-green);color:var(--green)}
   .p-amber{background:var(--soft-amber);color:var(--amber)}
   .p-violet{background:var(--soft-violet);color:var(--violet)}
-  .funnel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .funnel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
   .frow{display:flex;align-items:center;gap:14px;margin:9px 0}
-  .fbar{height:30px;border-radius:7px;display:flex;align-items:center;padding:0 12px;color:#fff;font-weight:700;font-size:13px;white-space:nowrap}
+  .fbar{height:28px;border-radius:7px;display:flex;align-items:center;padding:0 12px;color:#fff;font-weight:600;font-size:13px;white-space:nowrap}
   .fnum{width:150px;text-align:right;color:var(--mut);font-size:13px}
-  .note{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--blue);border-radius:10px;padding:14px 16px;margin:10px 0;font-size:14px}
+  .note{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--blue);border-radius:10px;padding:13px 16px;margin:10px 0;font-size:14px}
   .note.win{border-left-color:var(--green)} .note.warn{border-left-color:var(--amber)} .note.bad{border-left-color:var(--red)}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  @media(max-width:720px){.grid2{grid-template-columns:1fr}}
+  @media(max-width:820px){.side{display:none}.wrap{padding:20px}.topbar{padding:16px 20px}.grid2{grid-template-columns:1fr}}
   .foot{color:var(--mut);font-size:13px;margin-top:46px;border-top:1px solid var(--line);padding-top:16px}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <h1>GSD Idea · GTM Dashboard</h1>
-    <div class="sub">IDEA StatiCa, exclusive reseller in Saudi · Steel connection design · Updated 2026-06-26</div>
-  </header>
-  <div class="section">
+<div class="app">
+  <aside class="side">
+    <div class="brand">GSD Idea</div>
+    <div class="brand-sub">GTM Command Center</div>
+    <nav>
+      <a href="#campaigns">Campaigns</a>
+      <a href="#replies">Live replies</a>
+      <a href="#month1">Month 1 results</a>
+      <a href="#learnings">Learnings</a>
+      <a href="#plan">First two weeks</a>
+    </nav>
+    <div class="side-foot">IDEA StatiCa · Saudi</div>
+  </aside>
+  <main class="main">
+    <div class="topbar">
+      <div><h1>GTM Dashboard</h1><div class="sub">IDEA StatiCa, exclusive reseller in Saudi · Updated 2026-07-01</div></div>
+      <span class="live-dot">● Live</span>
+    </div>
+    <div class="wrap">
+  <div class="section" id="campaigns">
     <div class="sec-head"><span class="dot" style="background:var(--green)"></span><h2>Current Campaigns &amp; Sending</h2><span class="tag p-green">4 campaigns live · 1,238 leads</span></div>
     <div class="cards" style="margin-bottom:16px">
       <a class="card" href="/Email_Structural.xlsx" download style="display:block;text-decoration:none;color:inherit;border-top:3px solid var(--green)"><div style="font-size:12px;color:var(--mut);font-weight:700;margin-bottom:6px">EMAIL · STRUCTURAL</div><div class="num">444</div><div class="lbl">Ahmed Amr · <span class="pos">Live</span></div><div style="font-size:11px;color:var(--blue);font-weight:700;margin-top:8px">Download list &darr;</div></a>
@@ -73,13 +99,13 @@
     <div class="sub" style="margin-top:8px">Each card downloads its own list as Excel. The two copy docs open for Jan and Ahmed to review and comment.</div>
   </div>
 
-  <div class="section">
+  <div class="section" id="replies">
     <div class="sec-head"><span class="dot" style="background:var(--green)"></span><h2>Live Replies</h2><span class="tag p-green" id="liveTag">live</span></div>
     <div class="cards" id="emailPulse" style="margin-bottom:16px"></div>
     <div id="liveReplies" style="background:var(--card);border:1px solid var(--line);border-radius:14px;padding:6px 4px"></div>
     <div class="sub" id="liveUpdated" style="margin-top:8px">Loading live data...</div>
   </div>
-  <div class="section">
+  <div class="section" id="month1">
     <div class="sec-head"><span class="dot" style="background:var(--blue)"></span><h2>Month 1 Results</h2><span class="tag p-green">Optimization phase complete</span></div>
     <div class="cards" style="margin-bottom:16px">
       <div class="card"><div class="num bl">45.3%</div><div class="lbl">LinkedIn reply rate <span class="pos">(2.6x benchmark)</span></div></div>
@@ -101,7 +127,7 @@
       <div class="card"><div style="font-weight:700;margin-bottom:6px">Why email failed</div><div style="font-size:14px">Leads use Outlook / Microsoft 365. Cold emails from Google domains landed in spam.</div><div style="font-size:13px;color:var(--green);margin-top:8px"><b>Fix applied:</b> added 5 Outlook domains. 22 mailboxes total, 10 Outlook.</div></div>
     </div>
   </div>
-  <div class="section">
+  <div class="section" id="learnings">
     <div class="sec-head"><span class="dot" style="background:var(--amber)"></span><h2>Learnings</h2></div>
     <div class="note win">✅ <b>The opener works.</b> "Do you handle steel connections?" pulled a 45% reply rate, 2.6x above the 17% HQ benchmark. Keep it.</div>
     <div class="note warn">⚠️ <b>No locked Message 2.</b> After a "yes," there was no set follow-up, so threads drifted or died on Eid greetings with no CTA. Biggest fix for the first two weeks.</div>
@@ -109,7 +135,7 @@
     <div class="note">📌 <b>HeyReach tags are unreliable.</b> 3 of 8 "Interested" tags were just Eid greetings. Use real message content as ground truth.</div>
     <div class="note">🔌 <b>Hichem's account disconnected.</b> 5 warm leads need manual LinkedIn follow-up.</div>
   </div>
-  <div class="section">
+  <div class="section" id="plan">
     <div class="sec-head"><span class="dot" style="background:var(--violet)"></span><h2>First Two Weeks</h2><span class="tag p-blue">Target: 5 meetings</span></div>
     <div class="cards" style="margin-bottom:16px">
       <div class="card"><div class="num">718</div><div class="lbl">Total leads (master)</div></div>
@@ -128,6 +154,8 @@
     <div class="sub" style="margin-top:12px">Campaign copy for both personas is linked at the top (Review Structural copy / Review Seniors copy).</div>
   </div>
   <div class="foot">GSD Idea x IDEA StatiCa · Month 1 Report and First Two Weeks Plan · Full detail in the Obsidian brain.</div>
+    </div>
+  </main>
 </div>
 <script>
 (function(){
