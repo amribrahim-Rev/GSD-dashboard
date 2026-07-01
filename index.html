@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GSD Idea · GTM Dashboard</title>
 <style>
-  :root{--bg:#f6f7f9;--card:#ffffff;--ink:#0f172a;--mut:#64748b;--line:#e5e7eb;--blue:#2563eb;--green:#16a34a;--amber:#d97706;--red:#dc2626;--violet:#7c3aed;--soft-blue:#eff4ff;--soft-green:#ecfdf5;--soft-amber:#fffbeb;--soft-red:#fef2f2;--soft-violet:#f5f3ff;--radius:12px}
+  :root{--bg:#f6f7f9;--card:#fff;--ink:#0f172a;--mut:#64748b;--line:#e5e7eb;--blue:#2563eb;--green:#16a34a;--amber:#d97706;--red:#dc2626;--violet:#7c3aed;--soft-blue:#eff4ff;--soft-green:#ecfdf5;--soft-amber:#fffbeb;--soft-red:#fef2f2;--soft-violet:#f5f3ff;--radius:12px}
   *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 ui-sans-serif,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 ui-sans-serif,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
   .app{display:flex;min-height:100vh}
-  .side{width:238px;flex-shrink:0;background:var(--card);border-right:1px solid var(--line);padding:22px 16px;position:sticky;top:0;height:100vh}
+  .side{width:220px;flex-shrink:0;background:var(--card);border-right:1px solid var(--line);padding:22px 16px;position:sticky;top:0;height:100vh}
   .brand{font-size:18px;font-weight:800;letter-spacing:-.3px}
   .brand-sub{font-size:12px;color:var(--mut);margin-bottom:22px}
   .side nav{display:flex;flex-direction:column;gap:2px}
@@ -17,40 +17,43 @@
   .side nav a:hover{background:var(--bg);color:var(--ink)}
   .side-foot{position:absolute;bottom:20px;font-size:12px;color:var(--mut)}
   .main{flex:1;min-width:0}
-  .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 32px;border-bottom:1px solid var(--line);background:var(--card);position:sticky;top:0;z-index:5}
-  .topbar h1{margin:0;font-size:20px;letter-spacing:-.3px}
-  .live-dot{font-size:13px;font-weight:700;color:var(--green);background:var(--soft-green);padding:5px 12px;border-radius:20px;white-space:nowrap}
-  .wrap{max-width:1120px;margin:0 auto;padding:26px 32px 80px}
+  .topbar{display:flex;align-items:center;gap:12px;padding:16px 32px;border-bottom:1px solid var(--line);background:var(--card);position:sticky;top:0;z-index:5;flex-wrap:wrap}
+  .topbar h1{margin:0;font-size:19px;letter-spacing:-.3px;flex:1;min-width:180px}
+  select{font:inherit;padding:7px 12px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);cursor:pointer}
+  .live-dot{font-size:12px;font-weight:700;color:var(--green);background:var(--soft-green);padding:5px 12px;border-radius:20px;white-space:nowrap}
+  .wrap{max-width:1160px;margin:0 auto;padding:24px 32px 80px}
   .sub{color:var(--mut);font-size:13px}
-  .section{margin-top:30px}
+  .section{margin-top:28px}
   .sec-head{display:flex;align-items:center;gap:10px;margin:0 0 14px}
-  .sec-head .dot{width:8px;height:8px;border-radius:50%}
-  .sec-head h2{font-size:16px;margin:0;font-weight:700;letter-spacing:-.2px}
+  .sec-head h2{font-size:16px;margin:0;font-weight:700}
   .sec-head .tag{margin-left:auto;font-size:12px;font-weight:600;padding:4px 11px;border-radius:20px}
-  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:12px}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;box-shadow:0 1px 2px rgba(16,24,40,.04);transition:box-shadow .15s ease,transform .15s ease}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;box-shadow:0 1px 2px rgba(16,24,40,.04);transition:box-shadow .15s,transform .15s}
   a.card:hover{box-shadow:0 6px 18px rgba(16,24,40,.09);transform:translateY(-1px)}
-  .num{font-size:28px;font-weight:800;letter-spacing:-.5px}
-  .lbl{color:var(--mut);font-size:13px;margin-top:3px}
-  .pos{color:var(--green)} .neg{color:var(--red)} .bl{color:var(--blue)}
-  table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
-  th,td{text-align:left;padding:11px 16px;border-bottom:1px solid var(--line);font-size:14px}
-  th{color:var(--mut);font-weight:600;font-size:11px;letter-spacing:.04em;text-transform:uppercase;background:#fafafa}
-  tr:last-child td{border-bottom:none}
+  .kpi .lbl{color:var(--mut);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.03em}
+  .kpi .num{font-size:30px;font-weight:800;letter-spacing:-.5px;margin-top:4px}
+  .kpi .delta{font-size:12px;color:var(--mut);margin-top:2px}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px}
+  .frow{display:flex;align-items:center;gap:12px;margin:8px 0}
+  .flabel{width:130px;font-size:13px;color:var(--mut)}
+  .ftrack{flex:1;background:var(--bg);border-radius:6px;height:26px;overflow:hidden}
+  .fbar{height:26px;border-radius:6px;display:flex;align-items:center;padding:0 10px;color:#fff;font-weight:600;font-size:12px;white-space:nowrap}
+  .fval{width:70px;text-align:right;font-weight:700;font-size:14px}
+  .chip{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border:1px solid var(--line);border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;background:var(--card);color:var(--mut)}
+  .chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
   .pill{display:inline-block;padding:3px 10px;border-radius:7px;font-size:12px;font-weight:600}
-  .p-blue{background:var(--soft-blue);color:var(--blue)}
-  .p-green{background:var(--soft-green);color:var(--green)}
-  .p-amber{background:var(--soft-amber);color:var(--amber)}
-  .p-violet{background:var(--soft-violet);color:var(--violet)}
-  .funnel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
-  .frow{display:flex;align-items:center;gap:14px;margin:9px 0}
-  .fbar{height:28px;border-radius:7px;display:flex;align-items:center;padding:0 12px;color:#fff;font-weight:600;font-size:13px;white-space:nowrap}
-  .fnum{width:150px;text-align:right;color:var(--mut);font-size:13px}
-  .note{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--blue);border-radius:10px;padding:13px 16px;margin:10px 0;font-size:14px}
-  .note.win{border-left-color:var(--green)} .note.warn{border-left-color:var(--amber)} .note.bad{border-left-color:var(--red)}
-  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  @media(max-width:820px){.side{display:none}.wrap{padding:20px}.topbar{padding:16px 20px}.grid2{grid-template-columns:1fr}}
-  .foot{color:var(--mut);font-size:13px;margin-top:46px;border-top:1px solid var(--line);padding-top:16px}
+  .p-blue{background:var(--soft-blue);color:var(--blue)} .p-green{background:var(--soft-green);color:var(--green)}
+  .p-amber{background:var(--soft-amber);color:var(--amber)} .p-violet{background:var(--soft-violet);color:var(--violet)}
+  .p-gray{background:#f1f5f9;color:var(--mut)}
+  .rrow{border-bottom:1px solid var(--line);cursor:pointer}
+  .rrow:last-child{border-bottom:none}
+  .rhead{display:flex;align-items:center;gap:10px;padding:11px 14px}
+  .rhead .nm{flex:1;min-width:0;font-weight:600;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .rbody{padding:0 14px 12px 14px;font-size:14px;color:var(--ink);background:var(--bg)}
+  .rbody .q{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-top:2px;white-space:pre-wrap}
+  .muted{color:var(--mut);font-size:12px}
+  .foot{color:var(--mut);font-size:13px;margin-top:40px;border-top:1px solid var(--line);padding-top:16px}
+  @media(max-width:860px){.side{display:none}.wrap{padding:18px}.topbar{padding:14px 18px}}
 </style>
 </head>
 <body>
@@ -59,139 +62,177 @@
     <div class="brand">GSD Idea</div>
     <div class="brand-sub">GTM Command Center</div>
     <nav>
-      <a href="#campaigns">Campaigns</a>
-      <a href="#replies">Live replies</a>
-      <a href="#month1">Month 1 results</a>
-      <a href="#learnings">Learnings</a>
-      <a href="#plan">First two weeks</a>
+      <a href="#overview">Overview</a>
+      <a href="#replies">Replies</a>
+      <a href="#resources">Lists &amp; copy</a>
     </nav>
     <div class="side-foot">IDEA StatiCa · Saudi</div>
   </aside>
   <main class="main">
     <div class="topbar">
-      <div><h1>GTM Dashboard</h1><div class="sub">IDEA StatiCa, exclusive reseller in Saudi · Updated 2026-07-01</div></div>
+      <h1>GTM Performance</h1>
+      <select id="fChannel"><option value="all">All channels</option><option value="email">Email</option><option value="linkedin">LinkedIn</option></select>
+      <select id="fAccount"><option value="all">All accounts</option><option value="Jan">Jan</option><option value="Ahmed">Ahmed</option></select>
       <span class="live-dot">● Live</span>
     </div>
     <div class="wrap">
-  <div class="section" id="campaigns">
-    <div class="sec-head"><span class="dot" style="background:var(--green)"></span><h2>Current Campaigns &amp; Sending</h2><span class="tag p-green">4 campaigns live · 1,238 leads</span></div>
-    <div class="cards" style="margin-bottom:16px">
-      <a class="card" href="/Email_Structural.xlsx" download style="display:block;text-decoration:none;color:inherit;border-top:3px solid var(--green)"><div style="font-size:12px;color:var(--mut);font-weight:700;margin-bottom:6px">EMAIL · STRUCTURAL</div><div class="num">444</div><div class="lbl">Ahmed Amr · <span class="pos">Live</span></div><div style="font-size:11px;color:var(--blue);font-weight:700;margin-top:8px">Download list &darr;</div></a>
-      <a class="card" href="/Email_Seniors.xlsx" download style="display:block;text-decoration:none;color:inherit;border-top:3px solid var(--green)"><div style="font-size:12px;color:var(--mut);font-weight:700;margin-bottom:6px">EMAIL · SENIORS</div><div class="num">435</div><div class="lbl">Ahmed Amr · <span class="pos">Live</span></div><div style="font-size:11px;color:var(--blue);font-weight:700;margin-top:8px">Download list &darr;</div></a>
-      <a class="card" href="/LinkedIn_Structural.xlsx" download style="display:block;text-decoration:none;color:inherit;border-top:3px solid var(--blue)"><div style="font-size:12px;color:var(--mut);font-weight:700;margin-bottom:6px">LINKEDIN · STRUCTURAL</div><div class="num">233</div><div class="lbl">Ahmed Amr · <span class="pos">Live</span></div><div style="font-size:11px;color:var(--blue);font-weight:700;margin-top:8px">Download list &darr;</div></a>
-      <a class="card" href="/LinkedIn_Seniors.xlsx" download style="display:block;text-decoration:none;color:inherit;border-top:3px solid var(--blue)"><div style="font-size:12px;color:var(--mut);font-weight:700;margin-bottom:6px">LINKEDIN · SENIORS</div><div class="num">126</div><div class="lbl">Jan · <span class="pos">Live</span></div><div style="font-size:11px;color:var(--blue);font-weight:700;margin-top:8px">Download list &darr;</div></a>
-      <a class="card" href="/Jan_TierA.xlsx" download style="display:block;text-decoration:none;color:inherit;border:2px solid var(--blue)"><div style="font-size:12px;color:var(--blue);font-weight:700;margin-bottom:6px">★ JAN · TIER A</div><div class="num">84</div><div class="lbl">Send first · 1,400 avg conn</div><div style="font-size:11px;color:var(--blue);font-weight:700;margin-top:8px">Download Tier A &darr;</div></a>
-    </div>
-    <div class="funnel">
-      <div style="font-size:13px;font-weight:700;color:var(--mut);text-transform:uppercase;margin-bottom:14px">The sending we are doing</div>
-      <div class="frow"><div class="fbar" style="width:100%;background:#16a34a">Email · Structural — 444</div><div class="fnum">Live</div></div>
-      <div class="frow"><div class="fbar" style="width:98%;background:#16a34a">Email · Seniors — 435</div><div class="fnum">Live</div></div>
-      <div class="frow"><div class="fbar" style="width:52%;background:#2563eb">LinkedIn · Structural — 233</div><div class="fnum">Live</div></div>
-      <div class="frow"><div class="fbar" style="width:28%;background:#2563eb">LinkedIn · Seniors — 126</div><div class="fnum">Live</div></div>
-      <div style="display:flex;gap:18px;margin-top:14px;font-size:13px;color:var(--mut)"><span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:#16a34a;margin-right:5px"></span>Email · SmartLead · 879</span><span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:#2563eb;margin-right:5px"></span>LinkedIn · HeyReach · 359</span></div>
-    </div>
-    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:18px">
-      <a href="https://docs.google.com/spreadsheets/d/1s3VK1PCZD1CA9o6pvc3Gz5ws_coJKSHG_ts_mAEb1BQ/edit" target="_blank" rel="noopener" style="display:inline-block;background:var(--green);color:#fff;padding:12px 20px;border-radius:10px;font-weight:700;font-size:14px;text-decoration:none">Open all campaign lists &rarr;</a>
-      <a href="https://docs.google.com/document/d/1rBB6Tqb11dvWPUAflJQiIWErKcDXMM5n_2g6DdqgCRQ/edit" target="_blank" rel="noopener" style="display:inline-block;background:#fff;color:var(--blue);border:1px solid var(--blue);padding:12px 20px;border-radius:10px;font-weight:700;font-size:14px;text-decoration:none">Review Structural copy &rarr;</a>
-      <a href="https://docs.google.com/document/d/1oydYRGP9eauaLM0OytypezKJGNSNcFcf3dBnu5IAUP8/edit" target="_blank" rel="noopener" style="display:inline-block;background:#fff;color:var(--blue);border:1px solid var(--blue);padding:12px 20px;border-radius:10px;font-weight:700;font-size:14px;text-decoration:none">Review Seniors copy &rarr;</a>
-      <a href="/LinkedIn_Campaign_Copy.docx" download style="display:inline-block;background:#fff;color:var(--blue);border:1px solid var(--blue);padding:12px 20px;border-radius:10px;font-weight:700;font-size:14px;text-decoration:none">LinkedIn copy (Jan + Ahmed) &darr;</a>
-    </div>
-    <div class="sub" style="margin-top:8px">Each card downloads its own list as Excel. The two copy docs open for Jan and Ahmed to review and comment.</div>
-  </div>
 
-  <div class="section" id="replies">
-    <div class="sec-head"><span class="dot" style="background:var(--green)"></span><h2>Live Replies</h2><span class="tag p-green" id="liveTag">live</span></div>
-    <div class="cards" id="emailPulse" style="margin-bottom:16px"></div>
-    <div id="liveReplies" style="background:var(--card);border:1px solid var(--line);border-radius:14px;padding:6px 4px"></div>
-    <div class="sub" id="liveUpdated" style="margin-top:8px">Loading live data...</div>
-  </div>
-  <div class="section" id="month1">
-    <div class="sec-head"><span class="dot" style="background:var(--blue)"></span><h2>Month 1 Results</h2><span class="tag p-green">Optimization phase complete</span></div>
-    <div class="cards" style="margin-bottom:16px">
-      <div class="card"><div class="num bl">45.3%</div><div class="lbl">LinkedIn reply rate <span class="pos">(2.6x benchmark)</span></div></div>
-      <div class="card"><div class="num">37.1%</div><div class="lbl">Connection acceptance</div></div>
-      <div class="card"><div class="num">8</div><div class="lbl">Confirmed steel engineers</div></div>
-      <div class="card"><div class="num pos">1</div><div class="lbl">Meeting booked (Hasan Jarkas, Dewan)</div></div>
-    </div>
-    <div class="funnel">
-      <div style="font-size:13px;font-weight:700;color:var(--mut);text-transform:uppercase;margin-bottom:14px">LinkedIn funnel (Ahmed Amr + Hichem Hamane)</div>
-      <div class="frow"><div class="fbar" style="width:100%;background:#2563eb">170 invitations sent</div></div>
-      <div class="frow"><div class="fbar" style="width:62%;background:#3b82f6">63 connected</div><div class="fnum">37.1% accept</div></div>
-      <div class="frow"><div class="fbar" style="width:52%;background:#60a5fa">53 messages sent</div></div>
-      <div class="frow"><div class="fbar" style="width:40%;background:#16a34a">24 replied</div><div class="fnum">45.3% reply</div></div>
-      <div class="frow"><div class="fbar" style="width:20%;background:#15803d">8 confirmed engineers</div></div>
-      <div class="frow"><div class="fbar" style="width:8%;background:#166534">1 meeting</div><div class="fnum">Hasan Jarkas, Dewan</div></div>
-    </div>
-    <div class="grid2" style="margin-top:16px">
-      <div class="card"><div style="font-weight:700;margin-bottom:6px">Email channel</div><div style="font-size:13px;color:var(--mut)">17 mailboxes, 100% warmed</div><div class="num neg" style="font-size:24px;margin-top:6px">0% reply rate</div><div style="font-size:13px;color:var(--mut);margin-top:4px">0 replies all month</div></div>
-      <div class="card"><div style="font-weight:700;margin-bottom:6px">Why email failed</div><div style="font-size:14px">Leads use Outlook / Microsoft 365. Cold emails from Google domains landed in spam.</div><div style="font-size:13px;color:var(--green);margin-top:8px"><b>Fix applied:</b> added 5 Outlook domains. 22 mailboxes total, 10 Outlook.</div></div>
-    </div>
-  </div>
-  <div class="section" id="learnings">
-    <div class="sec-head"><span class="dot" style="background:var(--amber)"></span><h2>Learnings</h2></div>
-    <div class="note win">✅ <b>The opener works.</b> "Do you handle steel connections?" pulled a 45% reply rate, 2.6x above the 17% HQ benchmark. Keep it.</div>
-    <div class="note warn">⚠️ <b>No locked Message 2.</b> After a "yes," there was no set follow-up, so threads drifted or died on Eid greetings with no CTA. Biggest fix for the first two weeks.</div>
-    <div class="note bad">❌ <b>Email deliverability, not copy, was the problem.</b> Zero replies came from Google domains hitting Outlook spam folders. Fixed with Outlook mailboxes.</div>
-    <div class="note">📌 <b>HeyReach tags are unreliable.</b> 3 of 8 "Interested" tags were just Eid greetings. Use real message content as ground truth.</div>
-    <div class="note">🔌 <b>Hichem's account disconnected.</b> 5 warm leads need manual LinkedIn follow-up.</div>
-  </div>
-  <div class="section" id="plan">
-    <div class="sec-head"><span class="dot" style="background:var(--violet)"></span><h2>First Two Weeks</h2><span class="tag p-blue">Target: 5 meetings</span></div>
-    <div class="cards" style="margin-bottom:16px">
-      <div class="card"><div class="num">718</div><div class="lbl">Total leads (master)</div></div>
-      <div class="card"><div class="num">676</div><div class="lbl">With valid email</div></div>
-      <div class="card"><div class="num">42</div><div class="lbl">LinkedIn-only</div></div>
-      <div class="card"><div class="num neg">108</div><div class="lbl">Customers (excluded)</div></div>
-    </div>
-    <table>
-      <tr><th>Lane</th><th>Volume</th><th>Channel</th><th>Owner</th><th>Persona</th></tr>
-      <tr><td>Senior Email</td><td>336</td><td><span class="pill p-green">Email</span></td><td>GSD domains</td><td>Senior / leaders</td></tr>
-      <tr><td>Structural Email</td><td>340</td><td><span class="pill p-green">Email</span></td><td>GSD domains</td><td>Structural engineers</td></tr>
-      <tr><td>Senior LinkedIn</td><td>90</td><td><span class="pill p-blue">LinkedIn</span></td><td>Jan</td><td>Senior / leaders</td></tr>
-      <tr><td>Structural LinkedIn</td><td>90</td><td><span class="pill p-blue">LinkedIn</span></td><td>Ahmed Amr</td><td>Structural engineers</td></tr>
-      <tr><td>Cold Calls</td><td>50 / day</td><td><span class="pill p-amber">Calls</span></td><td>SDR</td><td>Hot + replied leads</td></tr>
-    </table>
-    <div class="sub" style="margin-top:12px">Campaign copy for both personas is linked at the top (Review Structural copy / Review Seniors copy).</div>
-  </div>
-  <div class="foot">GSD Idea x IDEA StatiCa · Month 1 Report and First Two Weeks Plan · Full detail in the Obsidian brain.</div>
+      <div class="section" id="overview">
+        <div class="cards" style="margin-bottom:14px">
+          <div class="card kpi"><div class="lbl">Sent</div><div class="num" id="kSent">–</div><div class="delta" id="dSent"></div></div>
+          <div class="card kpi"><div class="lbl">Replied</div><div class="num" id="kReplied">–</div><div class="delta" id="dReplied"></div></div>
+          <div class="card kpi"><div class="lbl">Reply rate</div><div class="num" id="kRate">–</div><div class="delta">of sent</div></div>
+          <div class="card kpi"><div class="lbl">Interested</div><div class="num" id="kInt">–</div><div class="delta">LinkedIn tagged</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:14px" id="ovGrid">
+          <div class="panel">
+            <div style="font-weight:700;font-size:14px;margin-bottom:10px">Daily performance</div>
+            <div style="position:relative;height:260px"><canvas id="perfChart"></canvas></div>
+          </div>
+          <div class="panel">
+            <div style="font-weight:700;font-size:14px;margin-bottom:14px">Funnel</div>
+            <div id="funnel"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section" id="replies">
+        <div class="sec-head"><h2>Replies</h2><span class="tag p-green" id="repTag">–</span></div>
+        <div id="tagChips" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"></div>
+        <div class="panel" style="padding:4px 0" id="repliesList"></div>
+        <div class="sub" id="updated" style="margin-top:8px">Loading…</div>
+      </div>
+
+      <div class="section" id="resources">
+        <div class="sec-head"><h2>Lists &amp; copy</h2></div>
+        <div class="cards">
+          <a class="card" href="/Email_Structural.xlsx" download style="text-decoration:none;color:inherit;border-top:3px solid var(--green)"><div class="muted" style="font-weight:700">EMAIL · STRUCTURAL</div><div class="num" style="font-size:24px;font-weight:800">444</div><div style="font-size:11px;color:var(--blue);font-weight:700;margin-top:6px">Download &darr;</div></a>
+          <a class="card" href="/Email_Seniors.xlsx" download style="text-decoration:none;color:inherit;border-top:3px solid var(--green)"><div class="muted" style="font-weight:700">EMAIL · SENIORS</div><div class="num" style="font-size:24px;font-weight:800">435</div><div style="font-size:11px;color:var(--blue);font-weight:700;margin-top:6px">Download &darr;</div></a>
+          <a class="card" href="/LinkedIn_Structural.xlsx" download style="text-decoration:none;color:inherit;border-top:3px solid var(--blue)"><div class="muted" style="font-weight:700">LINKEDIN · STRUCTURAL</div><div class="num" style="font-size:24px;font-weight:800">233</div><div style="font-size:11px;color:var(--blue);font-weight:700;margin-top:6px">Download &darr;</div></a>
+          <a class="card" href="/LinkedIn_Seniors.xlsx" download style="text-decoration:none;color:inherit;border-top:3px solid var(--blue)"><div class="muted" style="font-weight:700">LINKEDIN · SENIORS</div><div class="num" style="font-size:24px;font-weight:800">126</div><div style="font-size:11px;color:var(--blue);font-weight:700;margin-top:6px">Download &darr;</div></a>
+          <a class="card" href="/Jan_TierA.xlsx" download style="text-decoration:none;color:inherit;border:2px solid var(--blue)"><div style="color:var(--blue);font-weight:700;font-size:12px">★ JAN · TIER A</div><div class="num" style="font-size:24px;font-weight:800">84</div><div style="font-size:11px;color:var(--blue);font-weight:700;margin-top:6px">Download &darr;</div></a>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:14px">
+          <a href="https://docs.google.com/spreadsheets/d/1s3VK1PCZD1CA9o6pvc3Gz5ws_coJKSHG_ts_mAEb1BQ/edit" target="_blank" rel="noopener" style="background:var(--green);color:#fff;padding:11px 18px;border-radius:9px;font-weight:700;font-size:13px;text-decoration:none">All campaign lists &rarr;</a>
+          <a href="https://docs.google.com/document/d/1rBB6Tqb11dvWPUAflJQiIWErKcDXMM5n_2g6DdqgCRQ/edit" target="_blank" rel="noopener" style="background:var(--card);color:var(--blue);border:1px solid var(--blue);padding:11px 18px;border-radius:9px;font-weight:700;font-size:13px;text-decoration:none">Structural copy &rarr;</a>
+          <a href="https://docs.google.com/document/d/1oydYRGP9eauaLM0OytypezKJGNSNcFcf3dBnu5IAUP8/edit" target="_blank" rel="noopener" style="background:var(--card);color:var(--blue);border:1px solid var(--blue);padding:11px 18px;border-radius:9px;font-weight:700;font-size:13px;text-decoration:none">Seniors copy &rarr;</a>
+          <a href="/LinkedIn_Campaign_Copy.docx" download style="background:var(--card);color:var(--blue);border:1px solid var(--blue);padding:11px 18px;border-radius:9px;font-weight:700;font-size:13px;text-decoration:none">LinkedIn copy &darr;</a>
+        </div>
+      </div>
+
+      <div class="foot">GSD Idea x IDEA StatiCa · Live GTM dashboard · Email via SmartLead, LinkedIn via HeyReach.</div>
     </div>
   </main>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
 (function(){
-  var SC={'Interested':'p-green','Question':'p-blue','Not now':'p-amber','Replied':'p-violet'};
+  var DATA=null, chart=null, tagFilter='all';
+  var SC={'Interested':'p-green','Question':'p-blue','Not now':'p-amber','Replied':'p-gray'};
   function esc(s){return (s||'').replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
-  function ago(iso){ if(!iso) return ''; var d=new Date(iso),s=(Date.now()-d.getTime())/1000;
-    if(s<3600) return Math.max(1,Math.round(s/60))+'m ago'; if(s<86400) return Math.round(s/3600)+'h ago'; return Math.round(s/86400)+'d ago'; }
-  function render(d){
-    var ep=document.getElementById('emailPulse');
-    ep.innerHTML=(d.emails||[]).map(function(e){
-      var br=e.sent?((e.bounce/e.sent*100)).toFixed(1):'0';
-      return '<div class="card"><div style="font-size:12px;color:var(--mut);font-weight:700">EMAIL · '+esc(e.name).toUpperCase()+'</div>'+
-        '<div class="num" style="font-size:24px">'+e.sent+'<span style="font-size:13px;color:var(--mut)"> sent</span></div>'+
-        '<div class="lbl">'+e.reply+' replies · '+e.bounce+' bounce ('+br+'%)</div></div>';
-    }).join('');
-    var lr=document.getElementById('liveReplies'), items=d.replies||[];
-    var awaiting=items.filter(function(x){return x.awaiting;}).length;
-    document.getElementById('liveTag').textContent=items.length+' replies · '+awaiting+' to answer';
-    if(!items.length){ lr.innerHTML='<div style="padding:14px 16px;color:var(--mut);font-size:14px">'+(d.repliesErr?('Replies unavailable ('+esc(d.repliesErr)+'). Set HEYREACH_KEY in Railway.'):'No replies yet.')+'</div>'; }
-    else {
-      lr.innerHTML=items.map(function(r){
-        return '<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line)">'+
-          '<span class="pill '+(SC[r.status]||'p-violet')+'">'+esc(r.status)+'</span>'+
-          '<div style="flex:1;min-width:0"><div style="font-weight:700;font-size:14px">'+esc(r.first)+' <span style="font-weight:400;color:var(--mut)">· '+esc(r.company)+'</span></div></div>'+
-          (r.awaiting?'<span style="font-size:12px;color:var(--red);font-weight:700">reply &rarr;</span>':'')+
-          '<span style="font-size:12px;color:var(--mut);min-width:54px;text-align:right">'+esc(r.account)+'</span>'+
-          '<span style="font-size:12px;color:var(--mut);min-width:60px;text-align:right">'+ago(r.when)+'</span></div>';
-      }).join('');
-    }
-    document.getElementById('liveUpdated').textContent='Updated '+new Date(d.updated).toLocaleTimeString()+' · refreshes every 60s · showing first name + company + status only';
+  function ago(iso){if(!iso)return'';var s=(Date.now()-new Date(iso).getTime())/1000;if(s<3600)return Math.max(1,Math.round(s/60))+'m';if(s<86400)return Math.round(s/3600)+'h';return Math.round(s/86400)+'d';}
+  function ch(){return document.getElementById('fChannel').value;}
+  function acc(){return document.getElementById('fAccount').value;}
+  function incEmail(){return ch()!=='linkedin' && (acc()==='all'||acc()==='Ahmed');}
+  function incLI(){return ch()!=='email';}
+  function liAccts(){var a=acc();return a==='all'?['Jan','Ahmed']:(DATA.linkedin[a]?[a]:[]);}
+
+  function agg(){
+    var e=DATA.email||{}, l=DATA.linkedin||{};
+    var sent=0,replied=0,accepted=0,interested=0,invites=0,emailSent=0;
+    if(incEmail())for(var k in e){sent+=e[k].sent;emailSent+=e[k].sent;replied+=e[k].replied;}
+    if(incLI())liAccts().forEach(function(n){var a=l[n];if(a){sent+=a.invites;invites+=a.invites;accepted+=a.accepted;replied+=a.replies;interested+=a.interested;}});
+    return {sent:sent,replied:replied,accepted:accepted,interested:interested,invites:invites,emailSent:emailSent};
   }
-  function load(){ fetch('/api/live',{cache:'no-store'}).then(function(r){return r.json();}).then(render).catch(function(e){
-    document.getElementById('liveUpdated').textContent='Live data unavailable: '+e; }); }
+  function dailySeries(){
+    var days=DATA.days, e=DATA.email||{}, l=DATA.linkedin||{};
+    return days.map(function(day){
+      var s=0,r=0,a=0;
+      if(incEmail())for(var k in e){var d=e[k].daily[day];if(d){s+=d.sent;r+=d.replied;}}
+      if(incLI())liAccts().forEach(function(n){var dd=l[n]&&l[n].daily[day];if(dd){s+=dd.invites;r+=dd.replies;a+=dd.accepted;}});
+      return {day:day,sent:s,replied:r,accepted:a};
+    });
+  }
+  function num(n){return (n||0).toLocaleString();}
+
+  function renderKPI(){
+    var a=agg();
+    document.getElementById('kSent').textContent=num(a.sent);
+    document.getElementById('kReplied').textContent=num(a.replied);
+    document.getElementById('kRate').textContent=a.sent?((a.replied/a.sent*100).toFixed(1)+'%'):'0%';
+    document.getElementById('kInt').textContent=num(a.interested);
+    document.getElementById('dSent').textContent=(incEmail()?num(a.emailSent)+' email':'')+(incEmail()&&incLI()?' · ':'')+(incLI()?num(a.invites)+' invites':'');
+    document.getElementById('dReplied').textContent='across selected';
+  }
+  function bar(label,val,max,color){
+    var w=max?Math.max(3,Math.round(val/max*100)):3;
+    return '<div class="frow"><div class="flabel">'+label+'</div><div class="ftrack"><div class="fbar" style="width:'+w+'%;background:'+color+'"></div></div><div class="fval">'+num(val)+'</div></div>';
+  }
+  function renderFunnel(){
+    var a=agg(),h='';
+    if(incLI() && !incEmail()){
+      var m=a.invites||1;
+      h+=bar('Invites sent',a.invites,m,'#2563eb');
+      h+=bar('Accepted',a.accepted,m,'#3b82f6');
+      h+=bar('Replied',a.replied,m,'#16a34a');
+      h+=bar('Interested',a.interested,m,'#15803d');
+    } else if(incEmail() && !incLI()){
+      var m2=a.emailSent||1;
+      h+=bar('Emails sent',a.emailSent,m2,'#16a34a');
+      h+=bar('Replied',a.replied,m2,'#15803d');
+    } else {
+      var m3=a.sent||1;
+      h+=bar('Sent / invited',a.sent,m3,'#2563eb');
+      h+=bar('Accepted (LI)',a.accepted,m3,'#3b82f6');
+      h+=bar('Replied',a.replied,m3,'#16a34a');
+      h+=bar('Interested',a.interested,m3,'#15803d');
+    }
+    document.getElementById('funnel').innerHTML=h;
+  }
+  function renderChart(){
+    var s=dailySeries();
+    var labels=s.map(function(x){return x.day.slice(5);});
+    var ds=[
+      {label:'Sent',data:s.map(function(x){return x.sent;}),borderColor:'#2563eb',backgroundColor:'rgba(37,99,235,.08)',fill:true,tension:.3,pointRadius:2},
+      {label:'Replied',data:s.map(function(x){return x.replied;}),borderColor:'#16a34a',backgroundColor:'rgba(22,163,74,.08)',fill:true,tension:.3,pointRadius:2}
+    ];
+    if(incLI())ds.push({label:'Accepted',data:s.map(function(x){return x.accepted;}),borderColor:'#3b82f6',borderDash:[4,3],fill:false,tension:.3,pointRadius:2});
+    if(chart){chart.data.labels=labels;chart.data.datasets=ds;chart.update();return;}
+    chart=new Chart(document.getElementById('perfChart'),{type:'line',data:{labels:labels,datasets:ds},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:12}}}},scales:{y:{beginAtZero:true,grid:{color:'rgba(0,0,0,.06)'}},x:{grid:{display:false}}}}});
+  }
+  function renderReplies(){
+    var items=(DATA.replies||[]).filter(function(r){
+      if(!incLI())return false;
+      if(acc()!=='all' && r.account!==acc())return false;
+      if(tagFilter!=='all' && r.status!==tagFilter)return false;
+      return true;
+    });
+    var all=(DATA.replies||[]).filter(function(r){return incLI() && (acc()==='all'||r.account===acc());});
+    var counts={Interested:0,Question:0,'Not now':0,Replied:0};
+    all.forEach(function(r){counts[r.status]=(counts[r.status]||0)+1;});
+    var chips=[['all','All ('+all.length+')']].concat([['Interested','Interested ('+counts.Interested+')'],['Question','Question ('+counts.Question+')'],['Not now','Not now ('+counts['Not now']+')'],['Replied','Answered ('+counts.Replied+')']]);
+    document.getElementById('tagChips').innerHTML=chips.map(function(c){return '<span class="chip'+(tagFilter===c[0]?' on':'')+'" data-t="'+c[0]+'">'+c[1]+'</span>';}).join('');
+    Array.prototype.forEach.call(document.querySelectorAll('#tagChips .chip'),function(el){el.onclick=function(){tagFilter=el.getAttribute('data-t');renderReplies();};});
+    var aw=all.filter(function(r){return r.awaiting;}).length;
+    document.getElementById('repTag').textContent=all.length+' replies · '+aw+' to answer';
+    if(!items.length){document.getElementById('repliesList').innerHTML='<div style="padding:14px;color:var(--mut)">'+(DATA.repliesErr?('Unavailable: '+esc(DATA.repliesErr)):'No replies in this view.')+'</div>';return;}
+    document.getElementById('repliesList').innerHTML=items.map(function(r,i){
+      return '<div class="rrow" data-i="'+i+'"><div class="rhead">'+
+        '<span class="pill '+(SC[r.status]||'p-gray')+'">'+esc(r.status)+'</span>'+
+        '<span class="nm">'+esc(r.first)+' <span class="muted">· '+esc(r.company||'—')+'</span></span>'+
+        (r.awaiting?'<span style="color:var(--red);font-weight:700;font-size:12px">reply &rarr;</span>':'')+
+        '<span class="muted">'+esc(r.account)+'</span><span class="muted" style="min-width:34px;text-align:right">'+ago(r.when)+'</span></div>'+
+        '<div class="rbody" style="display:none"><div class="muted" style="margin:4px 0">'+(r.awaiting?'Their reply:':'Last message (you):')+'</div><div class="q">'+esc(r.text||'(no text)')+'</div></div></div>';
+    }).join('');
+    Array.prototype.forEach.call(document.querySelectorAll('#repliesList .rrow'),function(el){el.onclick=function(){var b=el.querySelector('.rbody');b.style.display=b.style.display==='none'?'block':'none';};});
+  }
+  function renderAll(){ if(!DATA)return; renderKPI(); renderFunnel(); renderChart(); renderReplies();
+    document.getElementById('updated').textContent='Updated '+new Date(DATA.updated).toLocaleTimeString()+' · last '+DATA.days.length+' days · auto-refresh 60s'; }
+  function load(){ fetch('/api/data',{cache:'no-store'}).then(function(r){return r.json();}).then(function(d){DATA=d;renderAll();}).catch(function(e){document.getElementById('updated').textContent='Live data unavailable: '+e;}); }
+  document.getElementById('fChannel').onchange=renderAll;
+  document.getElementById('fAccount').onchange=renderAll;
   load(); setInterval(load,60000);
 })();
 </script>
-
 </body>
 </html>
