@@ -167,7 +167,7 @@
     document.getElementById('dRate').textContent=rlab;
     document.getElementById('kInt').textContent=num(a.interested);
     document.getElementById('dSent').textContent=(incEmail()?num(a.emailSent)+' email':'')+(incEmail()&&incLI()?' · ':'')+(incLI()?num(a.invites)+' invites':'');
-    document.getElementById('dReplied').textContent=(incLI()?num(a.messages)+' messages sent':'across selected');
+    document.getElementById('dReplied').textContent=(incLI()&&!incEmail()?num(a.messaged)+' people messaged':'across selected');
   }
   function bar(label,val,max,color){
     var w=max?Math.max(3,Math.round(val/max*100)):3;
@@ -183,7 +183,7 @@
       h+=bar('Messaged',a.messaged,m,'#60a5fa');
       h+=bar('Replied',a.replied,m,'#16a34a');
       h+=bar('Interested',a.interested,m,'#15803d');
-      h+='<div class="muted" style="margin-top:12px;line-height:1.8">Acceptance rate: <b style="color:var(--ink)">'+pct(a.accepted,a.invites)+'</b> of invites<br>Messages sent: <b style="color:var(--ink)">'+num(a.messages)+'</b><br>Reply rate: <b style="color:var(--ink)">'+pct(a.liReplied,a.messaged||a.accepted)+'</b> of people messaged</div>';
+      h+='<div class="muted" style="margin-top:12px;line-height:1.8">Acceptance rate: <b style="color:var(--ink)">'+pct(a.accepted,a.invites)+'</b> of invites<br>People messaged: <b style="color:var(--ink)">'+num(a.messaged)+'</b><br>Reply rate: <b style="color:var(--ink)">'+pct(a.liReplied,a.messaged||a.accepted)+'</b> of people messaged</div>';
     } else if(incEmail() && !incLI()){
       var m2=a.emailSent||1;
       h+=bar('Emails sent',a.emailSent,m2,'#16a34a');
