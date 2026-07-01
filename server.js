@@ -5,8 +5,8 @@ const path = require('path');
 const port = process.env.PORT || 3000;
 const html = fs.readFileSync(path.join(__dirname, 'index.html'));
 
-const SL = process.env.SMARTLEAD_KEY || '';
-const HR = process.env.HEYREACH_KEY || '';
+const SL = process.env.SMARTLEAD_KEY || process.env.SmartLead_KEY || process.env.SMARTLEAD_API_KEY || '';
+const HR = process.env.HEYREACH_KEY || process.env.HeyReach_KEY || process.env.HEYREACH_API_KEY || process.env.HeyReach_Key || '';
 const SL_CAMPAIGNS = [{ id: 3554436, name: 'Seniors' }, { id: 3554160, name: 'Structural' }];
 const ACC = { 198373: 'Ahmed', 208941: 'Jan' };
 
